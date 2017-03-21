@@ -1,9 +1,3 @@
-
-#目前存在bug
-# HelloModule并不是一个类。是因为module和class不能同时在一个文件中定义吗
-# HelloModule::VERSION  也不能识别
-# 当在类中通过include引用之后，还是不能识别
-
 =begin
 模块只表示行为
 =end
@@ -12,22 +6,37 @@ module HelloModule
   def sayhello(name)
     puts "hello #{name}"
   end
+  def hello
+    puts " just hello "
+  end
+
+  module_function :hello
+  #module_function :sayhello
 
 end
 
 #单纯的直接调用module中的数据
 
-class HelloModule
-  included HelloModule
+class HelloModuleClass
+  include HelloModule
   attr_accessor :name
+  attr_accessor :version
   def initialize(myname="ruby")
     @name=myname
+    @version=VERSION
   end
 
   def hello()
     puts "HelloModule,I'am #{name}"
   end
+
+
 end
 
-mo=HelloModule.new
+mo=HelloModuleClass.new
 mo.hello
+mo.version
+mo.sayhello("李明") #这个来自于引用了module的类
+puts HelloModule::VERSION #这里是直接使用module中的常量
+HelloModule.hello
+
